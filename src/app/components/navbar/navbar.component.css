@@ -1,0 +1,62 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Styling the Navbar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 30px;
+    font-family: Arial, sans-serif;
+}
+
+nav h2 {
+    color: #fff;
+    font-size: 24px;
+}
+
+nav h2 a {
+    text-decoration: none;
+    color: #fff;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 4px;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+.active {
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+}
+
+/* Adding a separator line after the navbar */
+hr {
+    border: none;
+    height: 2px;
+    background-color: #ddd;
+    margin: 0;
+}
