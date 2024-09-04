@@ -38,9 +38,16 @@ export class LoginComponent {
     if (email && password) {
       this.authService.loginUser(email, password)
         .subscribe(
-          (response: any) => {
-            console.log(response);
-            this.router.navigate(['/exploreData']); // Navigate to the desired page upon successful login
+          (response: { token: string }) => {
+            if (response.token) {
+              // Save the token to localStorage and update AuthService
+              localStorage.setItem('token', response.token);
+              this.authService.setToken(response.token);
+              this.router.navigate(['/exploreData']); // Navigate to the desired page upon successful login
+            } else {
+              console.error('No token received');
+              alert('Login failed. Please try again.');
+            }
           },
           (error) => {
             console.error('Login failed', error);
