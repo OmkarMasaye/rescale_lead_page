@@ -4,7 +4,7 @@
       <ul>
         <li><a  routerLink="/exploreData" routerLinkActive="active">Explore Data</a></li>    
         @if(authService.isAuthenticated()){
-          <li (click)="authService.logout()"class="nav-link logout-link">Logout</li>
+          <li (click)="authService.logout()"class="logout-link"> <a class="nav-link">Logout</a></li>
         }@else{
           <li><a  routerLink="/login" routerLinkActive="active">Login</a></li>
           <li><a  routerLink="/signup" routerLinkActive="active">Signup</a></li>

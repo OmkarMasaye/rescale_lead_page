@@ -13,7 +13,9 @@ export class AuthService {
   
   constructor(private http: HttpClient, private router: Router) {
     const token = localStorage.getItem('token');
-    this.tokenSubject.next(token);
+    if (token) {
+      this.tokenSubject.next(token);
+    }
   }
 
   private getAuthHeaders(): HttpHeaders {

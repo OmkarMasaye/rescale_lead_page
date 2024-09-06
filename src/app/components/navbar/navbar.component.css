@@ -40,9 +40,11 @@ nav ul li a {
     padding: 8px 15px;
     transition: background-color 0.3s ease, color 0.3s ease;
     border-radius: 4px;
+    cursor: pointer;
 }
 
-nav ul li a:hover {
+nav ul li a:hover,
+.logout-link a:hover {
     background-color: #555;
     color: #fff;
 }
@@ -53,18 +55,19 @@ nav ul li a:hover {
     border-radius: 4px;
 }
 
-/* Adding a separator line after the navbar */
-hr {
-    border: none;
-    height: 2px;
-    background-color: #ddd;
-    margin: 0;
-}
-nav ul li a, .logout-link {
+.logout-link a {
     color: #fff;
     text-decoration: none;
     padding: 8px 15px;
     transition: background-color 0.3s ease, color 0.3s ease;
     border-radius: 4px;
     cursor: pointer;
+}
+
+/* Adding a separator line after the navbar */
+hr {
+    border: none;
+    height: 2px;
+    background-color: #ddd;
+    margin: 0;
 }
