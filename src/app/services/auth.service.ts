@@ -31,11 +31,11 @@ export class AuthService {
 
   signupUser(email: string, password: string): Observable<any> {
     const authData: AuthModel = { email, password };
-    return this.http.post("http://localhost:5000/register", authData, { responseType: "text" });
+    return this.http.post("https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/register", authData, { responseType: "text" });
   }
   loginUser(email: string, password: string): Observable<any> {
     const authData: AuthModel = { email, password };
-    return this.http.post<{ token: string }>("http://localhost:5000/login", authData)
+    return this.http.post<{ token: string }>("https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/login", authData)
       .pipe(
         tap(response => {
           const token = response.token;
@@ -73,7 +73,7 @@ export class AuthService {
     }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    this.http.post(`http://localhost:5000/logout`, {}, { headers: headers, responseType: 'text' })
+    this.http.post(`https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/logout`, {}, { headers: headers, responseType: 'text' })
       .pipe(
         tap(() => {
           this.tokenSubject.next(null); // Clear the token in BehaviorSubject

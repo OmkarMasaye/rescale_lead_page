@@ -32,7 +32,7 @@ export class ViewdataComponent implements OnInit {
   }
 
   loadData(): void {
-    this.http.get<any[]>(`http://localhost:5000/viewdata/${this.dataName}`).subscribe(
+    this.http.get<any[]>(`https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}`).subscribe(
       data => {
         this.data = data;
       },

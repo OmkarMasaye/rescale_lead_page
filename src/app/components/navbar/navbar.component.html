@@ -2,7 +2,7 @@
     <nav>
       <h2><a routerLink="/">Rescale</a></h2>
       <ul>
-        <li><a  routerLink="/exploreData" routerLinkActive="active">Explore Data</a></li>    
+        <li><a  routerLink="/exploreData" routerLinkActive="active">Home</a></li>    
         @if(authService.isAuthenticated()){
           <li (click)="authService.logout()"class="logout-link"> <a class="nav-link">Logout</a></li>
         }@else{
