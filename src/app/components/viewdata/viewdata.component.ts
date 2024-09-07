@@ -32,19 +32,28 @@ export class ViewdataComponent implements OnInit {
   }
 
   loadData(): void {
-    this.http.get<any[]>(`https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}`).subscribe(
-      data => {
-        this.data = data;
-      },
-      error => {
-        console.error('Failed to load data:', error);
-      }
-    );
+    const token = localStorage.getItem('token'); // Adjust based on how you store your token
+    if (this.dataName && token) {
+      const headers = { 'Authorization': `Bearer ${token}` }; // Include the token in the headers
+      this.http.get<any[]>(`https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}`, { headers }).subscribe(
+        data => {
+          this.data = data;
+        },
+        error => {
+          console.error('Failed to load data:', error);
+        }
+      );
+    } else {
+      console.error('Data name or token is null or undefined, cannot load data');
+    }
   }
+  
 
   downloadData(format: 'json' | 'csv'): void {
-    if (this.dataName) {
-      this.http.get(`http://localhost:5000/viewdata/${this.dataName}?format=${format}`, { responseType: 'blob' }).subscribe(
+    const token = localStorage.getItem('token'); // Adjust this based on how you store your token
+    if (this.dataName && token) {
+      const headers = { 'Authorization': `Bearer ${token}` }; // Include the token in the headers
+      this.http.get(`https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}?format=${format}`, { responseType: 'blob', headers }).subscribe(
         blob => {
           const fileExtension = format === 'json' ? 'json' : 'csv';
           const fileName = `${this.dataName}.${fileExtension}`;
@@ -55,7 +64,8 @@ export class ViewdataComponent implements OnInit {
         }
       );
     } else {
-      console.error('Data name is null or undefined, cannot download data');
+      console.error('Data name or token is null or undefined, cannot download data');
     }
   }
+  
 }
