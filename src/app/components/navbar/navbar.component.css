@@ -43,12 +43,12 @@ nav ul {
   align-items: center;
 }
 
-nav ul li {
+nav ul {
   margin-left: 20px;
   margin-bottom: 5px;
 }
 
-nav ul li a {
+nav ul a {
   color: #fff;
   text-decoration: none;
   padding: 8px 15px;
@@ -57,7 +57,7 @@ nav ul li a {
   cursor: pointer;
 }
 
-nav ul li a:hover,
+nav ul a:hover,
 .logout-link a:hover {
   background-color: #555;
   color: #fff;
@@ -69,7 +69,7 @@ nav ul li a:hover,
   border-radius: 4px;
 }
 
-nav ul li .logout-link a {
+nav ul .logout-link a {
   color: #fff;
   text-decoration: none;
   padding: 8px 15px;
@@ -84,4 +84,19 @@ hr {
   height: 2px;
   background-color: #ddd;
   margin: 0;
+}
+
+/* Media Query for Small Screens */
+@media (max-width: 600px) {
+  nav {
+    padding: 10px 20px;
+  }
+  .drop-down {
+    display: flex;
+    text-align: right;
+    margin-left: 10px;
+  }
+  nav ul a {
+    padding: 5px 10px;
+  }
 }

@@ -1,17 +1,20 @@
 <div>
   <nav>
-    <h2 class="logo-heading"><a routerLink="/home">
-      <img src="/assets/rescale.jpg" alt="rescale logo">
-    </a></h2>
+    <h2 class="logo-heading">
+      <a routerLink="/home">
+        <img src="/assets/rescale.jpg" alt="rescale logo" />
+      </a>
+    </h2>
     <ul>
-      <li><a  routerLink="/home" routerLinkActive="active">Home</a></li>    
+      <a routerLink="/home" routerLinkActive="active">Home</a>
       @if(authService.isAuthenticated()){
-        <li (click)="authService.logout()"class="logout-link"> <a class="nav-link">Logout</a></li>
+        <a class="nav-link"  (click)="authService.logout()" class="logout-link nav-link">Logout</a>
       }@else{
-        <li><a  routerLink="/login" routerLinkActive="active">Login</a></li>
-        <li><a  routerLink="/signup" routerLinkActive="active">Signup</a></li>
+      <div class="drop-down">
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <a routerLink="/signup" routerLinkActive="active">Signup</a>
+      </div>
       }
-          
     </ul>
   </nav>
   <hr />
