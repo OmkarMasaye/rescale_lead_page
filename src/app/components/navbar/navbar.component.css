@@ -45,7 +45,6 @@ nav ul {
 
 nav ul {
   margin-left: 20px;
-  margin-bottom: 5px;
 }
 
 nav ul a {
@@ -94,9 +93,21 @@ hr {
   .drop-down {
     display: flex;
     text-align: right;
+    gap: 8px;
     margin-left: 10px;
   }
   nav ul a {
     padding: 5px 10px;
+  }
+  .logo-heading {
+    width: 45px;
+    height: 45px;
+  }
+  .logo-heading img {
+    width: 45px;
+    height: 45px;
+  }
+  nav ul {
+    margin-left: 15px;
   }
 }
