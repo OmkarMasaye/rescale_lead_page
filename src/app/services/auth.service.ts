@@ -44,7 +44,7 @@ export class AuthService {
         }),
         catchError(error => {
           console.error('Login error', error);
-          return of('Login failed');
+          return of('Not Authorized');
         })
       );
   }

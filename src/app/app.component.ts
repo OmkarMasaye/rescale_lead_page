@@ -17,7 +17,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/exploreData']);  // Redirect to explore data page
+      this.router.navigate(['/home']);  // Redirect to explore data page
     }
   }
 }

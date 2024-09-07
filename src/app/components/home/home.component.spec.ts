@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExploreDataComponent } from './explore-data.component';
+import { ExploreDataComponent } from './home.component';
 
 describe('ExploreDataComponent', () => {
   let component: ExploreDataComponent;

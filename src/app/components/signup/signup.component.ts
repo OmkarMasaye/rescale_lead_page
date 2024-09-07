@@ -42,7 +42,7 @@ export class SignupComponent {
       this.authService.signupUser(email, password)
         .subscribe(
           (response: any) => {
-            console.log(response);
+            // console.log(response);
             this.router.navigate(['/login']);
           },
           (error) => {

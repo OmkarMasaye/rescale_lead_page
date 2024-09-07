@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-explore-data',
+  selector: 'app-home',
   standalone: true,
   imports: [],
-  templateUrl: './explore-data.component.html',
-  styleUrl: './explore-data.component.css'
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css'
 })
 export class ExploreDataComponent {
   constructor(private router: Router) { }

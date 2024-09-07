@@ -13,7 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-
   constructor(private router:Router,private authService:AuthService){}
 
   email =new FormControl("",[
@@ -43,10 +42,10 @@ export class LoginComponent {
               // Save the token to localStorage and update AuthService
               localStorage.setItem('token', response.token);
               this.authService.setToken(response.token);
-              this.router.navigate(['/exploreData']); // Navigate to the desired page upon successful login
+              this.router.navigate(['/home']); // Navigate to the desired page upon successful login
             } else {
               console.error('No token received');
-              alert('Login failed. Please try again.');
+              alert(response);
             }
           },
           (error) => {
