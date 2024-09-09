@@ -1,6 +1,46 @@
-<div>
-    <h1>{{ dataName | titlecase }} Data</h1>
-    <button (click)="downloadData('json')">Download JSON</button>
-    <button (click)="downloadData('csv')">Download CSV</button>
+<div class="container">
+  <h1>{{ dataName | titlecase }} Data</h1>
+
+  <div class="controls">
+    <div class="input-container">
+      <input
+        type="text"
+        placeholder="Search data..."
+        [(ngModel)]="searchQuery"
+        (input)="search()"
+      />
+    </div>
+
+    <div class="buttons-container">
+      <button (click)="onSortByTime()">Sort by Time</button>
+      <div class="dropdown">
+        <button (click)="toggleDropdown()" class="dropdown-button">
+          Download
+        </button>
+        <div class="dropdown-menu" [ngClass]="{'show': dropdownOpen}">
+          <a class="dropdown-item" (click)="downloadData('json')">Download JSON</a>
+          <a class="dropdown-item" (click)="downloadData('csv')">Download CSV</a>
+        </div>
+      </div>
+      
+      <!-- <button (click)="downloadData('json')">Download JSON</button>
+      <button (click)="downloadData('csv')">Download CSV</button> -->
+    </div>
+  </div>
+
+
+  <div *ngIf="filteredData.length > 0; else noData">
+    <div *ngFor="let item of filteredData" class="data-container">
+      <ul>
+        <li *ngFor="let key of getObjectKeys(item)">
+          <strong>{{ key | titlecase }}:</strong> {{ item[key] }}
+        </li>
+      </ul>
+      <hr />
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <p>Data Loading!</p>
+  </ng-template>
 </div>
-  

@@ -38,7 +38,10 @@ export class SignupComponent {
       this.authService.signupUser(email, password).subscribe(
         (response: any) => {
           // console.log(response);
+          const successMessage = response?.message || 'Signup successful!';
+          alert(successMessage);
           this.router.navigate(['/login']);
+          
         },
         (error) => {
           console.error('Signup failed', error);
