@@ -1,84 +1,89 @@
-<div class="container viewdata">
-  <h1>{{ dataName | titlecase }} Data</h1>
-
-  <div class="controls">
-    <div class="input-container">
-      <input
-        type="text"
-        placeholder="Search data..."
-        [(ngModel)]="searchQuery"
-        (input)="search()"
-      />
-    </div>
-
-    <div class="buttons-container">
-      <button (click)="onSortByTime()">Sort by Time</button>
-      
-      <div class="dropdown">
-        <button (click)="toggleDropdown()" class="dropdown-button">
-          Download
-        </button>
-        <div class="dropdown-menu" [ngClass]="{'show': dropdownOpen}">
-          <a class="dropdown-item" (click)="downloadData('json')">Download JSON</a>
-          <a class="dropdown-item" (click)="downloadData('csv')">Download CSV</a>
-        </div>
-      </div>
-      
-      <!-- <button (click)="downloadData('json')">Download JSON</button>
-      <button (click)="downloadData('csv')">Download CSV</button> -->
-    </div>
-  </div>
-
-
-  <div *ngIf="paginatedData.length > 0; else noData" class="omkar">
-    <div *ngFor="let item of paginatedData" class="data-container">
-      <ul>
-        <li *ngFor="let key of getObjectKeys(item)">
-          <strong>{{ key | titlecase }}:</strong> {{ item[key] }}
-        </li>
-      </ul>
-      <a (click)="toggleItemVisibility(item._id)"
-      [ngStyle]="{
-        'color': '#007bff',
-        'text-decoration': 'none',
-        'cursor': 'pointer',
-        'font-weight': 'bold',
-        'margin-top': '10px',
-        'display': 'inline-block'
-      }">
-        {{ expandedItems.has(item.id) ? 'Show Less' : 'Show More' }}
-      </a>
-      <hr />
-    </div>
-  </div>
-
-  <ng-template #noData>
-    <p>Data Loading!</p>
-  </ng-template>
-
-  <nav aria-label="Page navigation example" *ngIf="totalPages > 1">
-    <ul class="pagination justify-content-center">
-      
-      <!-- First and Previous buttons -->
-      <li class="page-item" [class.disabled]="currentPage === 1">
-        <a class="page-link" (click)="onFirst()" tabindex="-1">First</a>
-      </li>
-      <li class="page-item" [class.disabled]="currentPage === 1">
-        <a class="page-link" (click)="onPrevious()" tabindex="-1">Previous</a>
-      </li>
-  
-      <!-- Page number buttons -->
-      <li class="page-item" *ngFor="let page of [].constructor(endPage - startPage + 1); let i = index" [class.active]="currentPage === (startPage + i)">
-        <a class="page-link" (click)="goToPage(startPage + i)">{{ startPage + i }}</a>
-      </li>
-  
-      <!-- Next and Last buttons -->
-      <li class="page-item" [class.disabled]="currentPage === totalPages">
-        <a class="page-link" (click)="onNext()">Next</a>
-      </li>
-      <li class="page-item" [class.disabled]="currentPage === totalPages">
-        <a class="page-link" (click)="onLast()">Last</a>
-      </li>
-    </ul>
-  </nav>
+<div class="fullcontainer">
+  <app-home></app-home>
+   <div class="container viewdata">
+   
+    
+   
+     <div class="controls">
+       <div class="input-container">
+         <input
+           type="text"
+           placeholder="Search data..."
+           [(ngModel)]="searchQuery"
+           (input)="search()"
+         />
+       </div>
+   
+       <div class="buttons-container">
+         <button (click)="onSortByTime()">Sort by Time</button>
+         
+         <div class="dropdown">
+           <button (click)="toggleDropdown()" class="dropdown-button">
+             Download
+           </button>
+           <div class="dropdown-menu" [ngClass]="{'show': dropdownOpen}">
+             <a class="dropdown-item" (click)="downloadData('json')">Download JSON</a>
+             <a class="dropdown-item" (click)="downloadData('csv')">Download CSV</a>
+           </div>
+         </div>
+         
+         <!-- <button (click)="downloadData('json')">Download JSON</button>
+         <button (click)="downloadData('csv')">Download CSV</button> -->
+       </div>
+     </div>
+   
+   
+     <div *ngIf="paginatedData.length > 0; else noData" class="omkar">
+       <div *ngFor="let item of paginatedData" class="data-container">
+         <ul>
+           <li *ngFor="let key of getObjectKeys(item)">
+             <strong>{{ key | titlecase }}:</strong> {{ item[key] }}
+           </li>
+         </ul>
+         <a (click)="toggleItemVisibility(item._id)"
+         [ngStyle]="{
+           'color': '#007bff',
+           'text-decoration': 'none',
+           'cursor': 'pointer',
+           'font-weight': 'bold',
+           'margin-top': '10px',
+           'display': 'inline-block'
+         }">
+           {{ expandedItems.has(item._id) ? 'Show Less' : 'Show More' }}
+         </a>
+       </div>
+     </div>
+   
+     <ng-template #noData>
+       <p>Data Loading!</p>
+     </ng-template>
+   
+     <div class="page">
+       <nav class="nav" aria-label="Page navigation example" *ngIf="totalPages > 1">
+         <ul class="pagination justify-content-center">
+           
+           <!-- First and Previous buttons -->
+           <li class="page-item" [class.disabled]="currentPage === 1">
+             <a class="page-link" (click)="onFirst()" tabindex="-1">First</a>
+           </li>
+           <li class="page-item" [class.disabled]="currentPage === 1">
+             <a class="page-link" (click)="onPrevious()" tabindex="-1">Previous</a>
+           </li>
+       
+           <!-- Page number buttons -->
+           <li class="page-item" *ngFor="let page of [].constructor(endPage - startPage + 1); let i = index" [class.active]="currentPage === (startPage + i)">
+             <a class="page-link" (click)="goToPage(startPage + i)">{{ startPage + i }}</a>
+           </li>
+       
+           <!-- Next and Last buttons -->
+           <li class="page-item" [class.disabled]="currentPage === totalPages">
+             <a class="page-link" (click)="onNext()">Next</a>
+           </li>
+           <li class="page-item" [class.disabled]="currentPage === totalPages">
+             <a class="page-link" (click)="onLast()">Last</a>
+           </li>
+         </ul>
+       </nav>
+     </div>
+   </div>
 </div>

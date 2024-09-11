@@ -10,12 +10,13 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class ExploreDataComponent {
-  
+  activeItem: string | null = null;
   constructor(private router: Router) { }
    
   navigateToData(dataName: string): void {
     
     this.router.navigate(['/viewdata', dataName]);
+    this.activeItem = dataName;
     
   }
 }

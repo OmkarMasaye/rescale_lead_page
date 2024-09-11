@@ -1,4 +1,7 @@
-
+.fullcontainer{
+  display:flex;
+  flex-direction: row;
+}
 .container{
   padding: 20px;
   max-width: 800px;
@@ -10,22 +13,24 @@
   
 }
 .omkar{
-  height: 50vh;
+  height: 60vh;
   overflow: hidden;
   overflow-y: auto;
+  
 }
 /* Title Styling */
 h1 {
   text-align: center;
   color: #333;
   font-size: 28px;
-  margin-bottom: 20px;
+  
 }
 .controls {
   display: flex;
   flex-direction: row;
   gap: 10px; /* Space between input and buttons */
-  margin-bottom: 20px;
+  margin-bottom: 1px;
+  margin-top:1px;
 }
 .input-container {
   margin-bottom: 10px;
@@ -40,6 +45,7 @@ h1 {
   justify-content: flex-end;
   align-items: flex-end; 
   margin-bottom: 10px; 
+  
   gap: 2px;  
   
 }
@@ -68,12 +74,13 @@ button:focus {
 
 /* Data Container Styles */
 .data-container {
-  padding: 15px;
-  margin: 10px 0;
+  padding: 10px;
+  margin: 5px 0;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
 }
 
 /* Key-Value List Styling */
@@ -96,6 +103,7 @@ li strong {
   color: #333;
 }
 
+
 /* Divider between data blocks */
 hr {
   margin-top: 15px;
@@ -109,6 +117,12 @@ p {
   font-size: 18px;
   color: #666;
   margin-top: 20px;
+}
+.page{
+  display:flex;
+  justify-content: center;
+  margin-top: 10px;
+  align-items: center;
 }
 .dropdown {
   position: relative;

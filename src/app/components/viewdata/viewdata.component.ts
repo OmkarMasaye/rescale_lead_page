@@ -4,12 +4,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
+import { ExploreDataComponent } from '../home/home.component';
+
 
 
 @Component({
   selector: 'app-viewdata',
   standalone: true,
-  imports: [CommonModule, HttpClientModule,FormsModule],
+  imports: [CommonModule, HttpClientModule,FormsModule,ExploreDataComponent],
   templateUrl: './viewdata.component.html',
   styleUrls: ['./viewdata.component.css'],
 })
