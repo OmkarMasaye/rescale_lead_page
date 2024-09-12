@@ -4,8 +4,20 @@
 </div> -->
 <div class="home-container">
   <ul>
-    <li (click)="navigateToData('skoda')"><a>Skoda</a></li>
-    <li (click)="navigateToData('tata')"><a>Tata</a></li>
-    <li (click)="navigateToData('creditscore')"><a>Credit Score</a></li>
+    <li 
+      (click)="navigateToData('skoda')" 
+      [ngClass]="{'active': activeItem === 'skoda'}">
+      <a>Skoda</a>
+    </li>
+    <li 
+      (click)="navigateToData('tata')" 
+      [ngClass]="{'active': activeItem === 'tata'}">
+      <a>Tata</a>
+    </li>
+    <li 
+      (click)="navigateToData('creditscore')" 
+      [ngClass]="{'active': activeItem === 'creditscore'}">
+      <a>Credit Score</a>
+    </li>
   </ul>
 </div>
