@@ -46,7 +46,7 @@ To build this project run
 ```bash
   npm run build 
   or 
-  ng build --prod
+  ng build --configuration production
 ```
 
 
