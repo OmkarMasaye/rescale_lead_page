@@ -1,22 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
-export class ExploreDataComponent {
+export class ExploreDataComponent implements OnInit {
   activeItem: string | null = null;
+
   constructor(private router: Router) { }
-   
+
+  ngOnInit(): void {
+    this.navigateToData('tata'); // Navigate to Tata on initialization
+  }
+  
   navigateToData(dataName: string): void {
-    
     this.router.navigate(['/viewdata', dataName]);
     this.activeItem = dataName;
-    
   }
 }
