@@ -60,7 +60,10 @@ export class ViewdataComponent implements OnInit {
         )
         .subscribe(
           (data) => {
-            this.data = data;
+            this.data = data.map(item => {
+              const { q, ...rest } = item;
+              return rest;
+            });
             this.filteredData = [...this.data];
             // Calculate total pages based on data length and items per page
             this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
