@@ -61,7 +61,7 @@ export class ViewdataComponent implements OnInit {
         .subscribe(
           (data) => {
             this.data = data.map(item => {
-              const { q, ...rest } = item;
+              const { q,modifiedBy,__v ...rest } = item;
               return rest;
             });
             this.filteredData = [...this.data];
