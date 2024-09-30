@@ -5,13 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
 import { ExploreDataComponent } from '../home/home.component';
-
-
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-viewdata',
   standalone: true,
-  imports: [CommonModule, HttpClientModule,FormsModule,ExploreDataComponent],
+  imports: [CommonModule, HttpClientModule, FormsModule, ExploreDataComponent],
   templateUrl: './viewdata.component.html',
   styleUrls: ['./viewdata.component.css'],
 })
@@ -20,12 +19,21 @@ export class ViewdataComponent implements OnInit {
   data: any[] = [];
   filteredData: any[] = [];
   searchQuery: string = '';
-  sortDescending: boolean = true;
+  // searchTimeout: any;
+  searchQuerySubject: Subject<string> = new Subject<string>();
+  searchQuerySubscription: any;
+
   // Pagination properties
   currentPage: number = 1;
   itemsPerPage: number = 10;
   paginatedData: any[] = [];
   totalPages: number = 0;
+  totalRecords: number = 0;
+
+  // Sorting state
+  // sortOrder: string = 'asc';  
+  sortDropdownOpen = false; 
+  sortOrders: { [key: string]: 'asc' | 'desc' } = {};;  
 
   // Pagination window properties
   maxPagesToShow: number = 10; // Limit to showing 10 page numbers at a time
@@ -35,6 +43,9 @@ export class ViewdataComponent implements OnInit {
   defaultKeys: string[] = ['_id', 'name', 'email'];
   expandedItems: Set<number> = new Set();
   expandedItemId: number | null = null;  // Store the expanded item ID
+  
+  dropdownOpen = false;
+  selectedFormat: 'json' | 'csv' | null = null;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -47,31 +58,49 @@ export class ViewdataComponent implements OnInit {
         console.error('Data name is null or undefined');
       }
     });
+    this.searchQuerySubscription = this.searchQuerySubject
+    .pipe(debounceTime(1000)) 
+    .subscribe((searchQuery) => {
+      this.currentPage = 1; // Reset to first page when performing search
+      this.loadData();  // Trigger server-side search with current page
+    });
   }
 
-  loadData(): void {
-    const token = localStorage.getItem('token'); // Adjust based on how you store your token
+  loadData(page: number = 1): void {
+    const token = localStorage.getItem('token');
     if (this.dataName && token) {
-      const headers = { Authorization: `Bearer ${token}` }; // Include the token in the headers
+      const headers = { Authorization: `Bearer ${token}` };  // Authorization header with token
+      const limit = this.itemsPerPage; 
+      const search = this.searchQuery;
+      const sortOrder = this.sortOrders[this.dataName] || 'asc'; 
+
+      // Construct the API endpoint with page, limit, search, and sortOrder as query parameters
       this.http
-        .get<any[]>(
-          `https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}`,
+        .get<any>(
+          `https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}?page=${page}&limit=${limit}&search=${search}&sortOrder=${sortOrder}`,
           { headers }
         )
         .subscribe(
-          (data) => {
-            this.data = data.map(item => {
-              const { q,modifiedBy,__v ...rest } = item;
+          (response) => {
+            const { data, totalRecords, totalPages, currentPage } = response;
+  
+            // Filter out unnecessary fields (e.g., 'q', 'modifiedBy', '__v')
+            this.data = data.map((item: any) => {
+              const { q, modifiedBy, __v,data, ...rest } = item;
               return rest;
             });
+  
+            // Copy the data to filteredData for search and sorting operations
             this.filteredData = [...this.data];
-            // Calculate total pages based on data length and items per page
-            this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
-          
-            // Update paginated data and page window
+  
+            // Update pagination details
+            this.totalPages = totalPages;
+            this.totalRecords = totalRecords;
+            this.currentPage = currentPage;
+  
+            // Update paginated data based on the current page
             this.updatePaginatedData();
             this.updatePageWindow();
-
           },
           (error) => {
             console.error('Failed to load data:', error);
@@ -83,65 +112,63 @@ export class ViewdataComponent implements OnInit {
   }
 
   search(): void {
-    this.filteredData = this.data.filter((item) =>
-      Object.values(item)
-        .join(' ')
-        .toLowerCase()
-        .includes(this.searchQuery.toLowerCase())
-    );
-     // Update pagination after filtering
-    this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
-    this.currentPage = 1; // Reset to first page after search
-    this.updatePaginatedData();
-    this.updatePageWindow();
+    this.searchQuerySubject.next(this.searchQuery);
   }
 
-  sortDataByTime(): void {
-    console.log("Sorting data",this.filteredData)
-    this.filteredData.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-    console.log("Sorted data",this.filteredData)
-    this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
-    this.updatePaginatedData();
-    this.updatePageWindow();
+  ngOnDestroy(): void {
+    this.searchQuerySubscription.unsubscribe();
   }
 
-  onSortByTime(): void {
-
-    this.sortDataByTime();
-    
+  toggleSortDropdown() {
+    this.sortDropdownOpen = !this.sortDropdownOpen;
   }
-  dropdownOpen = false;
-  selectedFormat: 'json' | 'csv' | null = null;
+
+  // Sort data by time, depending on the order selected (asc or desc)
+  onSortByTime(order: 'asc' | 'desc'): void {
+    if (this.dataName) {
+      this.sortOrders[this.dataName] = order;  // Store sort order for the specific dataset
+      this.currentPage = 1;  // Reset to first page when sorting
+      this.loadData();  // Reload data with the dataset-specific sorting order
+    }
+    this.sortDropdownOpen = false;  // Close the dropdown after selecting
+  }
+
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
-  
-
+  isDownloading = false;
   downloadData(format: 'json' | 'csv'): void {
-    const token = localStorage.getItem('token'); // Adjust this based on how you store your token
+    this.isDownloading = true;
+    const token = localStorage.getItem('token');
     if (this.dataName && token) {
-      const headers = { Authorization: `Bearer ${token}` }; // Include the token in the headers
-      this.http
-        .get(
-          `https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}?format=${format}`,
-          { responseType: 'blob', headers }
-        )
-        .subscribe(
-          (blob) => {
-            const fileExtension = format === 'json' ? 'json' : 'csv';
-            const fileName = `${this.dataName}.${fileExtension}`;
-            saveAs(blob, fileName);
-            this.dropdownOpen = false;
-          },
-          (error) => {
-            console.error('Failed to download data:', error);
-          }
-        );
+        const headers = { Authorization: `Bearer ${token}` };
+        const sortOrder = this.sortOrders[this.dataName] || 'asc';  // Get current sort order
+        const sortBy = 'createdAt';  // You can update this to whatever field you are sorting by
+
+        this.http
+            .get(
+                `https://asia-south1-ads-ai-101.cloudfunctions.net/card_api/viewdata/${this.dataName}?format=${format}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
+                { responseType: 'blob', headers }
+            )
+            .subscribe(
+                (blob) => {
+                    const fileExtension = format === 'json' ? 'json' : 'csv';
+                    const fileName = `${this.dataName}.${fileExtension}`;
+                    saveAs(blob, fileName);
+                    this.isDownloading = false;
+                    this.dropdownOpen = false;
+                },
+                (error) => {
+                    this.isDownloading = false;
+                    console.error('Failed to download data:', error);
+                }
+            );
     } else {
-      console.error('Data name or token is null or undefined, cannot download data');
+        console.error('Data name or token is null or undefined, cannot download data');
     }
-  }
+}
+
 
   getObjectKeys(item: any): string[] {
     return this.expandedItems.has(item._id) ? Object.keys(item) : this.defaultKeys;
@@ -155,53 +182,46 @@ export class ViewdataComponent implements OnInit {
     }
   }
 
-   // Pagination methods
-   updatePaginatedData(): void {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    this.paginatedData = this.filteredData.slice(startIndex, endIndex);
+  updatePaginatedData(): void {
+    const startIndex = 0;
+    const endIndex = 10;
+    this.paginatedData = this.filteredData.slice(startIndex, endIndex); // Update with the new pagination logic
   }
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.updatePaginatedData();
-      this.updatePageWindow(); // Update page window when moving to a new page
+      this.currentPage = page;  // Ensure the page is set
+      this.loadData(page);  // Fetch the requested page with current sortOrder
     }
   }
 
   updatePageWindow(): void {
-    // Adjust the window of visible pages
     const halfWindow = Math.floor(this.maxPagesToShow / 2);
     
     if (this.totalPages <= this.maxPagesToShow) {
-      // If total pages are less than or equal to max pages to show, show all pages
       this.startPage = 1;
       this.endPage = this.totalPages;
     } else if (this.currentPage <= halfWindow) {
-      // If current page is near the start, show first 10 pages
       this.startPage = 1;
       this.endPage = this.maxPagesToShow;
     } else if (this.currentPage + halfWindow >= this.totalPages) {
-      // If current page is near the end, show last 10 pages
       this.startPage = this.totalPages - this.maxPagesToShow + 1;
       this.endPage = this.totalPages;
     } else {
-      // Otherwise, show a window of pages centered around the current page
       this.startPage = this.currentPage - halfWindow;
       this.endPage = this.currentPage + halfWindow;
     }
   }
 
-  onPrevious(): void {
-    if (this.currentPage > 1) {
-      this.goToPage(this.currentPage - 1);
+  onNext(): void {
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);  // Fetch next page
     }
   }
 
-  onNext(): void {
-    if (this.currentPage < this.totalPages) {
-      this.goToPage(this.currentPage + 1);
+  onPrevious(): void {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);  // Fetch previous page
     }
   }
 
@@ -212,5 +232,4 @@ export class ViewdataComponent implements OnInit {
   onLast(): void {
     this.goToPage(this.totalPages);
   }
-
 }
