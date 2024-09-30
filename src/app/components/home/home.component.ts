@@ -15,7 +15,7 @@ export class ExploreDataComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.navigateToData('tata'); // Navigate to Tata on initialization
+    this.navigateToData('skoda'); // Navigate to Tata on initialization
   }
   
   navigateToData(dataName: string): void {
