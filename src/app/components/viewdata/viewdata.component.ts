@@ -83,7 +83,8 @@ export class ViewdataComponent implements OnInit {
         .subscribe(
           (response) => {
             const { data, totalRecords, totalPages, currentPage } = response;
-  
+            
+            
             // Filter out unnecessary fields (e.g., 'q', 'modifiedBy', '__v')
             this.data = data.map((item: any) => {
               const { q, modifiedBy, __v,data, ...rest } = item;
@@ -138,7 +139,7 @@ export class ViewdataComponent implements OnInit {
     this.dropdownOpen = !this.dropdownOpen;
   }
   isDownloading = false;
-  downloadData(format: 'json' | 'csv'): void {
+  downloadData(format: 'json-download' | 'csv'): void {
     this.isDownloading = true;
     const token = localStorage.getItem('token');
     if (this.dataName && token) {
@@ -153,7 +154,7 @@ export class ViewdataComponent implements OnInit {
             )
             .subscribe(
                 (blob) => {
-                    const fileExtension = format === 'json' ? 'json' : 'csv';
+                    const fileExtension = format === 'json-download' ? 'json' : 'csv';
                     const fileName = `${this.dataName}.${fileExtension}`;
                     saveAs(blob, fileName);
                     this.isDownloading = false;
