@@ -87,7 +87,7 @@ export class ViewdataComponent implements OnInit {
             
             // Filter out unnecessary fields (e.g., 'q', 'modifiedBy', '__v')
             this.data = data.map((item: any) => {
-              const { q, modifiedBy, __v,data, ...rest } = item;
+              const { q,d, modifiedBy, __v,data, ...rest } = item;
               return rest;
             });
   
@@ -144,7 +144,7 @@ export class ViewdataComponent implements OnInit {
     const token = localStorage.getItem('token');
     if (this.dataName && token) {
         const headers = { Authorization: `Bearer ${token}` };
-        const sortOrder = this.sortOrders[this.dataName] || 'asc';  // Get current sort order
+        const sortOrder = this.sortOrders[this.dataName] || 'desc';  // Get current sort order
         const sortBy = 'createdAt';  // You can update this to whatever field you are sorting by
 
         this.http
