@@ -1,5 +1,15 @@
 {
   "projects": {
-    "default": "rescale-data"
-  }
+    "default": "ads-ai-101"
+  },
+  "targets": {
+    "ads-ai-101": {
+      "hosting": {
+        "backend": [
+          "rescale-admin"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

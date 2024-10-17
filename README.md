@@ -81,4 +81,6 @@ Overwrite existing index.html? Select No.
 Deploy to Firebase
 ```bash
   firebase deploy
-```
+
+
+gcloud compute scp browser.tgz rescale-server-n2-mongodb:~/.```
