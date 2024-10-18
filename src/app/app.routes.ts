@@ -7,6 +7,7 @@ import { ExploreDataComponent } from './components/home/home.component';
 import { ViewdataComponent } from './components/viewdata/viewdata.component';
 import { authGuard } from './auth.guard';
 
+
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },

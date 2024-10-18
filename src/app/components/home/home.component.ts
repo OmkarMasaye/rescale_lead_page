@@ -22,4 +22,9 @@ export class ExploreDataComponent implements OnInit {
     this.router.navigate(['/viewdata', dataName]);
     this.activeItem = dataName;
   }
+
+  // navigateToData(dataName: string): void {
+  //   this.router.navigate(['/datatable', dataName]);
+  //   this.activeItem = dataName;
+  // }
 }
